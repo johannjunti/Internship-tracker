@@ -32,6 +32,7 @@ class InternshipTrackerApp:
         self.conversation_round = tk.IntVar()
         self.internship_test = tk.IntVar()
         self.approved = tk.IntVar()
+        self.denied = tk.IntVar()
         self.contract_signed = tk.IntVar()
 
         self.create_checkbox("Email Sent", self.email_sent, 0, 0)
@@ -40,7 +41,8 @@ class InternshipTrackerApp:
         self.create_checkbox("Conversation Round", self.conversation_round, 1, 0)
         self.create_checkbox("Internship Test", self.internship_test, 1, 1)
         self.create_checkbox("Approved", self.approved, 1, 2)
-        self.create_checkbox("Contract Signed", self.contract_signed, 1, 3)
+        self.create_checkbox("Denied", self.denied, 1, 3)
+        self.create_checkbox("Contract Signed", self.contract_signed, 1, 4)
 
         self.buttons_frame = ttk.LabelFrame(root, text="CRUD", padding=(10, 5))
         self.buttons_frame.grid(row=2, column=0, padx=(11, 10), pady=(0, 5), sticky="nsew")  
@@ -61,7 +63,7 @@ class InternshipTrackerApp:
         self.tree_frame = ttk.LabelFrame(root, text="Company List", padding=(10, 5))
         self.tree_frame.grid(row=3, column=0, padx=(11, 10), pady=(0, 10), sticky="nsew")  
 
-        self.tree = ttk.Treeview(self.tree_frame, columns=('Name', 'Email Sent', 'Positive', 'Negative', 'Conversation', 'Test', 'Approved', 'Contract'), show='headings')
+        self.tree = ttk.Treeview(self.tree_frame, columns=('Name', 'Email Sent', 'Positive', 'Negative', 'Conversation', 'Test', 'Approved','Denied', 'Contract'), show='headings')
         self.tree.heading('Name', text='Company Name')
         self.tree.heading('Email Sent', text='Email Sent')
         self.tree.heading('Positive', text='Email Received Positive')
@@ -69,6 +71,7 @@ class InternshipTrackerApp:
         self.tree.heading('Conversation', text='Conversation Round')
         self.tree.heading('Test', text='Internship Test')
         self.tree.heading('Approved', text='Approved')
+        self.tree.heading('Denied', text='Denied')
         self.tree.heading('Contract', text='Contract Signed')
         self.tree.grid(row=0, column=0, padx=5, pady=5, sticky="nsew")
         self.load_data()
@@ -84,6 +87,7 @@ class InternshipTrackerApp:
                       conversation_round INTEGER,
                       internship_test INTEGER,
                       approved INTEGER,
+                      denied INTEGER,
                       contract_signed INTEGER)''')
         self.conn.commit()
 
@@ -95,7 +99,7 @@ class InternshipTrackerApp:
         company_name = self.company_name_entry.get()
         if company_name:
             self.c.execute('''INSERT INTO companies (name, email_sent, positive_received, negative_received,
-                                                    conversation_round, internship_test, approved, contract_signed)
+                                                    conversation_round, internship_test, approved, denied, contract_signed)
                            VALUES (?, ?, ?, ?, ?, ?, ?, ?)''',
                            (company_name,
                             1 if self.email_sent.get() else 0,
@@ -104,6 +108,7 @@ class InternshipTrackerApp:
                             1 if self.conversation_round.get() else 0,
                             1 if self.internship_test.get() else 0,
                             1 if self.approved.get() else 0,
+                            1 if self.denied.get() else 0,
                             1 if self.contract_signed.get() else 0))
             self.conn.commit()
             self.load_data() 
@@ -124,7 +129,8 @@ class InternshipTrackerApp:
                 self.conversation_round.set(int(current_values[4] == "Yes"))
                 self.internship_test.set(int(current_values[5] == "Yes"))
                 self.approved.set(int(current_values[6] == "Yes"))
-                self.contract_signed.set(int(current_values[7] == "Yes"))
+                self.denied.set(int(current_values[7] == "Yes"))
+                self.contract_signed.set(int(current_values[8] == "Yes"))
             else:
                 messagebox.showwarning("Data Error", "No data found for selected company.")
         else:
@@ -148,6 +154,7 @@ class InternshipTrackerApp:
         self.conversation_round.set(0)
         self.internship_test.set(0)
         self.approved.set(0)
+        self.denied.set(0)
         self.contract_signed.set(0)
 
     def apply_edit(self):
@@ -156,7 +163,7 @@ class InternshipTrackerApp:
             company_name = self.company_name_entry.get()
             if company_name:
                 self.c.execute('''UPDATE companies SET name=?, email_sent=?, positive_received=?, negative_received=?,
-                                                 conversation_round=?, internship_test=?, approved=?, contract_signed=?
+                                                 conversation_round=?, internship_test=?, approved=?, denied=?, contract_signed=?
                                   WHERE name=?''',
                                (company_name,
                                 1 if self.email_sent.get() else 0,
@@ -164,7 +171,8 @@ class InternshipTrackerApp:
                                 1 if self.email_received_negative.get() else 0,
                                 1 if self.conversation_round.get() else 0,
                                 1 if self.internship_test.get() else 0,
-                                 1 if self.approved.get() else 0,
+                                1 if self.approved.get() else 0,
+                                1 if self.denied.get() else 0,
                                 1 if self.contract_signed.get() else 0,
                                 self.tree.item(selected_item, "values")[0])) 
                 self.conn.commit()
@@ -183,7 +191,7 @@ class InternshipTrackerApp:
             data = (row[0], "Yes" if row[1] == 1 else "No", "Yes" if row[2] == 1 else "No",
                     "Yes" if row[3] == 1 else "No", "Yes" if row[4] == 1 else "No",
                     "Yes" if row[5] == 1 else "No", "Yes" if row[6] == 1 else "No",
-                    "Yes" if row[7] == 1 else "No")
+                    "Yes" if row[7] == 1 else "No", "Yes" if row[8] == 1 else "No")
             self.tree.insert('', 'end', values=data)
 
     def apply_dark_mode(self):
