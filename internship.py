@@ -100,7 +100,7 @@ class InternshipTrackerApp:
         if company_name:
             self.c.execute('''INSERT INTO companies (name, email_sent, positive_received, negative_received,
                                                     conversation_round, internship_test, approved, denied, contract_signed)
-                           VALUES (?, ?, ?, ?, ?, ?, ?, ?)''',
+                           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)''',
                            (company_name,
                             1 if self.email_sent.get() else 0,
                             1 if self.email_received_positive.get() else 0,
