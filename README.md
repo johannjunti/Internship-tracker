@@ -21,6 +21,7 @@
 
 - Make sure you change the path to your internship.py in .vbs
 - Create Shortcut on your desktop and locate the .vbs file
+- When you open the application it creates the db automatically
 - If you make changes on anything expect the GUI make sure to delete the db because it may cause errors
 - Enjoy
 
