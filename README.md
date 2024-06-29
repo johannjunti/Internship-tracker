@@ -15,12 +15,13 @@
 **Requirements**
 
 - Python 3.x (tested with Python 3.12)
-- tkinter libarary and SQLite (should be included in Python standard library)
+- tkinter library and SQLite (should be included in Python standard library)
 
 **Usage**
 
 - Make sure you change the path to your internship.py in .vbs
 - Create Shortcut on your desktop and locate the .vbs file
+- If you make changes on anything expect the GUI make sure to delete the db because it may cause errors
 - Enjoy
 
 **Have suggestions for improvements, please feel free to open an issue**  
