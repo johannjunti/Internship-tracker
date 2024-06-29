@@ -15,7 +15,7 @@
 **Requirements**
 
 - Python 3.x (tested with Python 3.12)
-- tkinter libarary and SQLite (should be included in Python standard library)
+- tkinter library and SQLite (should be included in Python standard library)
 
 **Usage**
 
